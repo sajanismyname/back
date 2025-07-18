@@ -3,7 +3,7 @@ import {ApiError} from '../utils/apiError.js'
 import {User} from '../models/user.models.js'
 import { ApiResponse } from '../utils/apiResponse.js'
 
-const registerUser = asyncHandler(async (req, res)=>{
+const registerUser = asyncHandler(async (req, res) => {
     // res.status(200).json({
     //     message: "ok"
     // })
@@ -46,7 +46,7 @@ const registerUser = asyncHandler(async (req, res)=>{
         coverImage: coverImage?.url || "",
         email,
         password,
-        username: Username.toLowerCase()
+        username: Username.toLowerCase(),
     }
     )
 
@@ -61,8 +61,8 @@ const registerUser = asyncHandler(async (req, res)=>{
 
     return res.status(201).json(
         new ApiResponse(200, createdUser, "User registered Successfully"
-    )
-})
+    ))
+} )
 
 
 export {registerUser}
