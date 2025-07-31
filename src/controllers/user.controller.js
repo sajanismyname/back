@@ -23,17 +23,17 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, email, Username, password } = req.body;
+  const { fullName, email, username, password } = req.body;
   console.log("email: ", email);
 
   if (
-    [fullName, email, Username, password].some((field) => field?.trim() === "")
+    [fullName, email, username, password].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "All fields are required to be filled.");
   }
 
   const existedUser = await User.findOne({
-    $or: [{ Username }, { email }],
+    $or: [{ username }, { email }],
   });
 
   if (existedUser) {
@@ -63,12 +63,12 @@ const registerUser = asyncHandler(async (req, res) => {
     coverImage: coverImage?.url || "",
     email,
     password,
-    username: (Username || "").toLowerCase(),
+    username: (username || "").toLowerCase(),
   });
 
-  const createdUser = await user
-    .findById(user._id)
-    .select("-password -refreshToken");
+  const createdUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
 
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while registering the user");
@@ -80,8 +80,9 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const userlogin = asyncHandler(async (req, res) => {
+  console.log("Login req.body:", req.body);
   const { email, username, password } = req.body;
-  if (!username || !email) {
+  if (!(username && email)) {
     throw new ApiError(400, "username and email not found!!");
   }
 
@@ -120,7 +121,7 @@ const userlogin = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         {
-          findUser: loggendInUser,
+          user: loggendInUser,
           accessToken,
           refreshToken,
         },
