@@ -6,6 +6,7 @@ const destPath = path.join(process.cwd(), "public", "temp");
 
 if (!fs.existsSync(destPath)) {
   fs.mkdirSync(destPath, { recursive: true });
+  v;
 }
 
 const storage = multer.diskStorage({
